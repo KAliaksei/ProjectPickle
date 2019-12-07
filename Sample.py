@@ -1,0 +1,32 @@
+# -----------------------------------------------------------------------------
+# Created:     04.03.2014
+# Copyright:   (c) Josua Schmid 2014
+# Licence:     AGPLv3
+#
+# Sample script for parsing HTML tables
+# -----------------------------------------------------------------------------
+
+import urllib.request
+from pprint import pprint
+from html_table_parser import HTMLTableParser
+import pandas as pd
+
+
+def url_get_contents(url):
+    """ Opens a website and read its binary contents (HTTP Response Body) """
+    req = urllib.request.Request(url=url)
+    f = urllib.request.urlopen(req)
+    return f.read()
+
+
+def main():
+    url = 'https://finance.yahoo.com/quote/AAPL/history/'
+    xhtml = url_get_contents(url).decode('utf-8')
+
+    p = HTMLTableParser()
+    p.feed(xhtml)
+    pprint(p.tables)
+
+
+if __name__ == '__main__':
+    main()
