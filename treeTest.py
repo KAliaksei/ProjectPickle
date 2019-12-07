@@ -25,4 +25,3 @@ def build_bst(list):
 
 print(build_bst(testlist))
 print(build_bst(testlist).pprint(index=True))
-
