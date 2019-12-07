@@ -17,7 +17,7 @@ def usersearchcheck(entry):
             ticker = sheet1.cell_value(i, 0)
             url = ("https://finance.yahoo.com/quote/%s/history/" %ticker)
             print(url)
-            return url
+
         else:
             counter += 1
         if counter == 3312:
@@ -25,23 +25,10 @@ def usersearchcheck(entry):
             break
     return url
 
-def build_bst(list):
-    if not list:
-        return None
-
-    # find middle
-    mid = math.floor(int(len(list)) / 2)
-
-    # make the middle element the root
-    root = (Node(list[mid]))
-    root.left = (build_bst(list[:mid]))
-    root.right = (build_bst(list[mid + 1:]))
-    return root
 usersearchcheck(entry)
 #usersearch = input("What company do you want to analyze?")
-url = ("https://finance.yahoo.com/quote/AAPL/history/")
-# Assign the table data to a Pandas dataframe 
-table = pd.read_html(url)[0] 
+# Assign the table data to a Pandas dataframe
+table = pd.read_html(usersearchcheck(entry))[0]
 table.to_excel("data1.xlsx")
 
 loc = ('data1.xlsx')
@@ -53,14 +40,32 @@ length = 1
 while length != 31:
     if "Dividend" in sheet.cell_value(length,5):
        break
-    else:        
+    else:
         dataset.insert(0,float(sheet.cell_value(length,5)))
         length+=1
 
 testlist = dataset
 
 
-print(dataset)
-#print(build_bst(testlist))
-print(build_bst(testlist).pprint(index=True))
+def insert(root, Node):
+    if root is None:
+        root = Node
+    else:
+        if root.value < Node.value:
+            if root.right is None:
+                root.right = Node
+            else:
+                insert(root.right, Node)
+        else:
+            if root.left is None:
+                root.left = Node
+            else:
+                insert(root.left, Node)
 
+def build_tree(list):
+    r = Node(list[0])
+    for numbers in list[1:]:
+        insert(r,Node(numbers))
+    return r
+
+print(build_tree(dataset))
