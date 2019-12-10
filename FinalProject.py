@@ -1,7 +1,10 @@
-import pandas as pd
-import xlrd
 from binarytree import Node
 import math
+import statistics
+
+import pandas as pd
+import xlrd
+
 
 def insert(root, Node):
     if root is None:
@@ -17,25 +20,22 @@ def insert(root, Node):
                 root.left = Node
             else:
                 insert(root.left, Node)
+
 def build_tree(list):
     r = Node(list[0])
     for numbers in list[1:]:
         insert(r,Node(numbers))
     return r
 def timeframe():
-    stime = str(input("Enter W, M, or Q for weekly, monthly, or quartrly data analysis"))
-    print(stime == "M")
+    stime = str(input("Enter W, M, or Q for weekly, monthly, or quarterly data analysis"))
     if (stime == "M"):
         stime = 30
-        print(stime)
         return stime
     elif (stime =="W"):
         stime = 7
-        print(stime)
         return stime
     elif (stime == "Q"):
         stime = 90
-        print(stime)
         return stime
     else:
         print("Invalid value")
@@ -60,6 +60,18 @@ def usersearchcheck(entry):
             print("Company not found")
             runtime()
     return url
+
+        
+def statanalyses(lst):
+    maxprice = print("The highest recorded value over the selected time frame was: ", max(lst))
+    minprice = print("The lowest recorded value over the selected time frame was: " , min(lst))
+    avgg =(max(lst)-min(lst))/(len(lst))
+    avggrowth = print("The average growth over the selected time frame was : ", "%.2f" % avgg, "per day")
+    if(lst[0] < lst[-1]):
+        print("The stock value grew ", "%.2f" % (lst[-1] - lst[0]), "over the selected time frame")
+    else:
+        print("The stock value declined", "%.2f" % (lst[0] - lst[-1]), " over the selected time frame")
+
 def runtime():
     while(True):
         entry = input("Enter company name to analyze")
@@ -74,7 +86,6 @@ def runtime():
         dataset = []
         length = 1
         length1 = timeframe()
-        print(length1)
         while length != length1:
             if "Dividend" in sheet.cell_value(length,5):
                 length+=1
@@ -82,8 +93,10 @@ def runtime():
             else:
                 dataset.insert(0,float(sheet.cell_value(length,5)))
                 length+=1
-
+        statanalyses(dataset)
         testlist = dataset
 
         print(build_tree(dataset))
 runtime()
+
+#tesla, microsoft, apple,  search engine example: blizzard + activision
